@@ -15,5 +15,5 @@ class Army_Test(Army):
         unit3 = Immortals(10, "gauss")
         
         d1.addUnit(unit1)
-        d1.addUnit(unit2)
-        d1.addUnit(unit3)
+#         d1.addUnit(unit2)
+#         d1.addUnit(unit3)

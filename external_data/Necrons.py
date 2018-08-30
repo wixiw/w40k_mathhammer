@@ -13,7 +13,7 @@ profile_Immortal = ModelProfile(5,3,3,4,4,1,1,10,3)
 Distance Weapon
 '''
 s_weapon_gaussBlaster = ShootingWeapon("Gauss blaster", 
-                        24, RapidFire(2), 5, -2, 1, 9)
+                        24, RapidFire(1), 5, -2, 1, 9)
 s_weapon_teslaCarabine = ShootingWeapon("Tesla carabine", 
                         24, Assault(2), 5, 0, 1, 9)
 

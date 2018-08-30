@@ -23,6 +23,21 @@ class ShootingWeapon():
     def exportToText(self, tabs = ""):
         s = tabs + self.name
         return s
+    
+    def getShoots(self):
+        return self.type.A
+    
+    #@param return the strength carac of the weapon
+    def getS(self):
+        return self.S
+
+    #@param return the armor penetration carac of the weapon
+    def getAP(self):
+        return self.AP
+        
+    #@return the damage carac of the weapon
+    def getD(self):
+        return self.D
 
 class WeaponType():
     def __init__(self, name, A):
@@ -31,10 +46,10 @@ class WeaponType():
         
     def __str__(self):
         return self.typeName + "_" + str(self.A)
-        
+    
 class RapidFire(WeaponType):
     def __init__(self, A):
-        super().__init__("RapideFire", A)
+        super().__init__("RapideFire", 2*A)
         
 class Assault(WeaponType):
     def __init__(self, A):
