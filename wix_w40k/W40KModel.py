@@ -128,6 +128,10 @@ class Figurine(ConfigurableObject):
     #@return : get save caracteristic
     def getSv(self):
         return self.profile.Sv
+  
+    #@return : get invulnerable save caracteristic
+    def getInv(self):
+        return self.profile.Inv
     
     #@return : get feel no pain caracteristic
         return self.profile.FnP  

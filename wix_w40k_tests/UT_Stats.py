@@ -13,15 +13,15 @@ from wix_w40k.ShootingSimulation import *
 class UT_ShootingStats(unittest.TestCase):
 
     def testToHit(self):
-        self.assertRaises(ImpossibleRoll, chanceToHit, 0)
-        self.assertRaises(ImpossibleRoll, chanceToHit, 1)
-        self.assertEqual(chanceToHit(2), 5/6)
-        self.assertEqual(chanceToHit(3), 4/6)
-        self.assertEqual(chanceToHit(4), 3/6)
-        self.assertEqual(chanceToHit(5), 2/6)
-        self.assertEqual(chanceToHit(6), 1/6)
-        self.assertRaises(ImpossibleRoll, chanceToHit, 7)
-        self.assertRaises(ImpossibleRoll, chanceToHit, 8)
+        self.assertAlmostEqual(chanceToHit([1,1,1,1,1,1]), 1)
+        self.assertAlmostEqual(chanceToHit([0,1,1,1,1,1]), 5/6)
+        self.assertAlmostEqual(chanceToHit([0,0,1,1,1,1]), 4/6)
+        self.assertAlmostEqual(chanceToHit([0,0,0,1,1,1]), 3/6)
+        self.assertAlmostEqual(chanceToHit([0,0,0,0,1,1]), 2/6)
+        self.assertAlmostEqual(chanceToHit([0,0,0,0,0,1]), 1/6)
+        self.assertAlmostEqual(chanceToHit([0,0,0,0,0,0]), 0)
+        #tesla case :
+        self.assertAlmostEqual(chanceToHit([0,0,1,1,1,3]), 3*1/6+1*1/6*3)
         
     def testToHurt(self):
         self.assertRaises(IncorrectProfile, chanceToHurt, 4, 0)
