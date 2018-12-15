@@ -11,7 +11,7 @@ class ShootingWeapon():
         assert isinstance(_type, WeaponType)
         self.type = _type
         self.S = S
-        assert AP <= 0
+        assert AP == "-" or AP <= 0 
         self.AP = AP
         self.D = D
         self.cost = cost

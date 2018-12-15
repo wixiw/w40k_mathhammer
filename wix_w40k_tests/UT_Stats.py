@@ -145,17 +145,28 @@ class UT_ShootingStats(unittest.TestCase):
         self.assertAlmostEqual(chanceToWound(4, 2, 3), 4*2/6)                   
              
              
-#     def testWeaponShoot:
-#         #Bolter like
-#         weapon = ShootingWeapon("Test weapon", 
-#                         24, RapidFire(1), 4, "-", 1, 0)
-#         
-#         #MeqLike target
-#         profile = ModelProfile(6,3,3,4,4,1,1,10,3)
-# 
-#         simulateWeaponShoot(weapon, profile)
+    def testWeaponShoot(self):
+        #Bolter like
+        weapon = ShootingWeapon("Test weapon", 
+                        24, RapidFire(1), 4, "-", 1, 0)
+         
+        #Meq like attacker
+        WS = 3
         
-
+        #MeqLike target
+        target = ModelProfile(6,3,3,4,4,1,1,10,3)
+ 
+        #stimulation at rapid fire range
+        self.assertAlmostEqual(simulateWeaponShoot(weapon, WS, target), 2*2/3*1/2*1/3)
+        
+    def testGaussImmortals(self):
+        #Firing 5 immortals on MEQs
+        unit = Immortals()
+        target = profile_Immortal
+        wounds = simulateUnitShoot(unit, target)
+    
+        self.assertAlmostEqual(wounds, 2.96, 0, 0.01)
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

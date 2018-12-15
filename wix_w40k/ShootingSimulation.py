@@ -57,8 +57,8 @@ def simulateWeaponShoot(weapon, WS, targetProfile):
     shoots = weapon.getShoots()
     touched = shoots * chanceToHit(WS)
     hurts = touched * chanceToHurt(weapon.getS(), targetProfile.T)
-    damaged = hurts * chanceToGoThruSave(weapon.getAP(), targetProfile.getSv(), targetProfile.getInv())
-    wound = damaged * chanceToWound(weapon.getD(), targetProfile.getW(), targetProfile.getFnP)                                 
+    damaged = hurts * chanceToGoThruSave(weapon.getAP(), targetProfile.Sv, targetProfile.Inv)
+    wound = damaged * chanceToWound(weapon.getD(), targetProfile.W, targetProfile.FnP)                                 
     
     return wound
  
