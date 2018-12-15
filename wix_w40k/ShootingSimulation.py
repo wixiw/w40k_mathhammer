@@ -3,7 +3,8 @@
 
 from wix_w40k.W40KModel import *
 from wix_w40k.Dices import * 
-
+from numpy import dot
+ 
 class IncorrectWeaponProfile(Exception):
     pass
 
@@ -11,22 +12,24 @@ class IncorrectWeaponProfile(Exception):
 Compute the statistical wounds that a unit can make to a target
 @return wounds
 '''
-def simulateUnitShoot(firingUnit, targetProfile):
+def simulateUnitShoot(firingUnit, targetProfile, verbose = False):
     assert isinstance(firingUnit, Unit)
     assert isinstance(targetProfile, ModelProfile)
     
-    print("Firing unit : " + firingUnit.exportToText())
-    print("Target profile : \n" + targetProfile.exportToText())
-    
-    print("----------------")
-    print("Results : ")
+    if verbose:
+        print("Firing unit : " + firingUnit.exportToText())
+        print("Target profile : \n" + targetProfile.exportToText())
+        
+        print("----------------")
+        print("Results : ")
     
     wounds = 0
     for fig in firingUnit.getFigs():
         wounds += simulateFigShoot(fig, targetProfile)
         
-    print("Wounds : " + str(wounds))
-    print("----------------")
+    if verbose:
+        print("Wounds : " + str(wounds))
+        print("----------------")
     
     return wounds
     
@@ -54,8 +57,8 @@ def simulateWeaponShoot(weapon, WS, targetProfile):
     assert isinstance(targetProfile, ModelProfile)
     
     
-    shoots = weapon.getShoots()
-    touched = shoots * chanceToHit(WS)
+    
+    touched = weapon.getShoots() * chanceToHit(weapon.getHitProfile(WS))
     hurts = touched * chanceToHurt(weapon.getS(), targetProfile.T)
     damaged = hurts * chanceToGoThruSave(weapon.getAP(), targetProfile.Sv, targetProfile.Inv)
     wound = damaged * chanceToWound(weapon.getD(), targetProfile.W, targetProfile.FnP)                                 
@@ -64,10 +67,11 @@ def simulateWeaponShoot(weapon, WS, targetProfile):
  
 '''
 @param weapon skill of attacker
-@return touchs made by a
+@param hit profile of the weapon (table : each slot represent a dice result. Contained value is the number of hits)
+@return touchs made by an attack
 '''
-def chanceToHit(skill):
-    return d6_rollMoreThan(skill)
+def chanceToHit(hitProfile):
+    return dot(hitProfile, d6_Profile)
        
 '''
 @param strength of attacker

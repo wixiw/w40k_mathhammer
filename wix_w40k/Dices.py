@@ -9,6 +9,12 @@ class ImpossibleRoll(Exception):
         super().__init__( "A roll of " + str(rollTarget) + "+ is impossible")
 
 '''
+Global var to get the statical table for each dice roll of a d6
+   note : firt index is always set to zero to allow slot index to be equal to dice value
+'''
+d6_Profile = [0, 1/6., 1/6., 1/6., 1/6., 1/6., 1/6.]
+
+'''
 @param the dice result to reach at least or equal (success roll)
 @return the statistics of success (between 0 and 1)
 '''

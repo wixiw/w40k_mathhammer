@@ -16,6 +16,12 @@ class ShootingWeapon():
         self.D = D
         self.cost = cost
         
+        #the hit profile is a table that associate for each d6 value, a hit count.
+        #typically it allows to create tesla weapon with a [0,1,1,1,1,1,2] table.
+        #   note : firt index is always set to zero to allow slot index to be equal to dice value
+        #It is handy when handling hit modificators
+        self.hitProfile = [0, 1,1,1,1,1,1]
+        
     def debugText(self):
         print("Weapon : " + self.name + " " + str(self.range) +"\" " + str(self.type) +
                " S" + str(self.S) + " AP" + str(self.AP) + " D" + str(self.D) + " at " + str(self.cost) + "pts.")
@@ -38,6 +44,23 @@ class ShootingWeapon():
     #@return the damage carac of the weapon
     def getD(self):
         return self.D
+    
+    #Configure the weapon to create additional hits on some results
+    #@param hitProc : minimal score to reach with the dice
+    #@param additionalHits : number of hits added
+    def setHitProcs(self, hitProc, additionalHits):
+        for diceRoll in [1,2,3,4,5,6]:
+            if hitProc <= diceRoll:
+                self.hitProfile[diceRoll] = 1 + additionalHits
+                
+    def getHitProfile(self, WS):
+        profile = self.hitProfile.copy()
+        for diceRoll in [1,2,3,4,5,6]:
+            if diceRoll < WS:
+                profile[diceRoll] = 0
+            else:
+                profile[diceRoll] = self.hitProfile[diceRoll]
+        return profile
 
 class WeaponType():
     def __init__(self, name, A):
