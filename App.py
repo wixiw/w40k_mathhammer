@@ -13,5 +13,8 @@ if __name__ == '__main__':
     #Firing 5 immortals on MEQs
     unit = Immortals()
     target = profile_Immortal
-    simulateUnitShoot(unit, target, True)
+    wounds = simulateUnitShoot(unit, target, True)
+    
+    print("unit cost : " + str(unit.getCost()))
+    print("wound cost : " + str(unit.getCost()/wounds))
     

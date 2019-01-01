@@ -59,7 +59,7 @@ class ModelProfile():
         return s
             
 class Figurine(ConfigurableObject):
-    def __init__(self, name, profile):
+    def __init__(self, name, profile, cost):
         super().__init__(name)
         
         #The list of caracteristics of the figurine
@@ -67,6 +67,9 @@ class Figurine(ConfigurableObject):
         
         #The list of weapons of the figurine
         self.shootingWeapons = dict()
+        
+        #total fig cost
+        self.cost = cost
     
     def addEquipment(self):
         assert False
@@ -134,7 +137,14 @@ class Figurine(ConfigurableObject):
         return self.profile.Inv
     
     #@return : get feel no pain caracteristic
+    def getFnP(self):
         return self.profile.FnP  
+    
+    def getCost(self):
+        cost = self.cost
+        for weapon in self.shootingWeapons.values():
+            cost += weapon.getCost()
+        return cost
     
 class Unit(ConfigurableObject):
     '''
@@ -154,6 +164,11 @@ class Unit(ConfigurableObject):
     
     def getFigs(self):
         return self.figs
-        
+    
+    def getCost(self):
+        cost = 0
+        for fig in self.figs:
+            cost += fig.getCost()
+        return cost
 
     

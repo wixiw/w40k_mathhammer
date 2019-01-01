@@ -24,7 +24,7 @@ Troops
        
 class Immortal(Figurine):
     def __init__(self):
-        super().__init__("Immortal", profile_Immortal)
+        super().__init__("Immortal", profile_Immortal, 8)
             
 class Immortals(Unit):
     def __init__(self, nb = 5, weapon = "gauss"):

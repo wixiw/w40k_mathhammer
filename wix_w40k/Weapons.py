@@ -33,17 +33,21 @@ class ShootingWeapon():
     def getShoots(self):
         return self.type.A
     
-    #@param return the strength carac of the weapon
+    #@return the strength carac of the weapon
     def getS(self):
         return self.S
 
-    #@param return the armor penetration carac of the weapon
+    #@return the armor penetration carac of the weapon
     def getAP(self):
         return self.AP
         
     #@return the damage carac of the weapon
     def getD(self):
         return self.D
+    
+    #@return point cost of the weapon
+    def getCost(self):
+        return self.cost
     
     #Configure the weapon to create additional hits on some results
     #@param hitProc : minimal score to reach with the dice
