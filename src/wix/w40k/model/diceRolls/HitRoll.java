@@ -9,15 +9,29 @@ package wix.w40k.model.diceRolls;
  */
 public class HitRoll {
 
+    /** Number of attacks */
     private double attacks;
+    
+    /** Attacking model hit skill */
     private Skill skill;
+    
+    /** Hit modifier */
     private int mod;
-    private DiceResults explAtt;
-    private DiceResults extraHits;
-
+    
+    /** minimal score on a dice to create additional attacks */
+    private int explAttValue;
+    
+    /** number of additional attacks generated on each "explAttValue" success */
+    private int explAttCount;
+    
+    /** minimal score on dice to create additional hits */
+    private int extraHitsValue; 
+    
+    /** number of additional hit created on each "extraHitsValue" success */
+    private int extraHitsCount; 
+    
     /**
      * Configure the number of attacks (dices) in the roll
-     * 
      * @param attacksCount
      */
     public void setAttacks(double attacksCount) {
@@ -27,7 +41,6 @@ public class HitRoll {
 
     /**
      * Set the skill of the model making the roll
-     * 
      * @param s
      */
     public void setSkill(Skill s) {
@@ -37,19 +50,15 @@ public class HitRoll {
 
     /**
      * Dice result modifier (+1, -1, ...)
-     * 
      * @param modifier
      */
     public void setModifier(int modifier) {
 	mod = modifier;
-	throw new UnsupportedOperationException();// TODO implement associated
-						  // behavior
     }
 
     /**
      * Extra attacks generated for each dice face (they will need to be rolled
      * again)
-     * 
      * @param minFace
      *            minimal value to reach with the dice (equal or more)
      * @param extraAttacks
@@ -59,14 +68,12 @@ public class HitRoll {
 	assert 0 < minFace;
 	assert 0 < extraAttacks;
 
-	explAtt.setValueForAtLeast(minFace, extraAttacks);
-	throw new UnsupportedOperationException();// TODO implement associated
-						  // behavior
+	explAttValue = minFace;
+	explAttCount = extraAttacks;
     }
 
     /**
      * Extra auto-hits generated for each dice face (hence not rolled, cf tesla)
-     * 
      * @param minFace
      *            minimal value to reach with the dice (equal or more)
      * @param extraHits
@@ -76,23 +83,70 @@ public class HitRoll {
 	assert 0 < minFace;
 	assert 0 < hits;
 
-	extraHits.setValueForAtLeast(minFace, hits);
-	throw new UnsupportedOperationException();// TODO implement associated
-						  // behavior
+	extraHitsValue = minFace;
+	extraHitsCount = hits;
     }
 
     /**
      * Roll the dices
-     * 
      * @return the number of successfull hits
      */
     public double roll() {
 	//Check that minimal configuration has been done
 	if( attacks == 0 || skill.getValue() == 0)
-		throw new IllegalArgumentException();
-		
-	DiceResults firstRoll = DiceResults.statsRollD6(attacks);
+	    throw new IllegalArgumentException();
+
+	//Roll dices a first time
+	DiceResults dices = DiceResults.statsRollD6(attacks);
+
+	//If allowed, reroll failed dices and add them to first Roll
+	_rerollDices(dices);
 	
-	return firstRoll.countSuccess(skill.getValue());
+	//If allowed create additional attacks
+	if( explAttCount != 0 )
+	{
+	    //Roll extra attacks
+	    double extraAttackCount = explAttCount*dices.countSuccess(explAttValue-mod);
+	    DiceResults extraAttacks = DiceResults.statsRollD6(extraAttackCount);
+	    
+	    //If allowed, reroll additional attacks failed dices
+	    _rerollDices(extraAttacks);
+	    //Add extra attacks to first roll
+	    dices.addRolls(extraAttacks);
+	}
+
+	//Count success with modifier
+	double success = dices.countSuccess(skill.getValue()-mod);
+	
+	//If allowed, create additional hits (like tesla)
+	if( extraHitsCount != 0)
+	    success += extraHitsCount*dices.countSuccess(extraHitsValue-mod);
+	    
+	return success;
+    }
+    
+    
+    private void _rerollDices(DiceResults dices)
+    {
+	//If allowed, reroll additional attacks failed dices
+	switch (skill.getRerolls()) {
+	case Skill.R1:
+	    dices.rerollDicesBelow(2);
+	    break;
+
+	case Skill.RE:
+	    //If reroll capacity is optional and under a hit bonus, we can keep dices that would failed before modifier but would be ok with it.
+	    if(skill.isRerollOptional() && 0 < mod)
+		dices.rerollDicesBelow(skill.getValue()-mod);
+	    else
+		dices.rerollDicesBelow(skill.getValue());
+	    break;
+
+	case Skill.RN:
+	    break;
+
+	default:
+	    throw new UnsupportedOperationException();
+	}
     }
 }
