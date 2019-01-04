@@ -1,4 +1,4 @@
-package wix_tests.w40k.model.diceRolls;
+package wix_tests.w40k_v8.model.diceRolls;
 
 import static org.junit.Assert.*;
 
@@ -6,8 +6,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import wix.w40k.model.diceRolls.HitRoll;
-import wix.w40k.model.diceRolls.Skill;
+import wix.w40k_v8.model.diceRolls.HitRoll;
+import wix.w40k_v8.model.diceRolls.Skill;
 
 public class UT_HitRoll {
     @Rule
@@ -53,7 +53,7 @@ public class UT_HitRoll {
     @Test
     public void roll_simpleRE() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(3, Skill.RE));
+	hit1.setSkill(new Skill(3, Skill.Reroll.MayAll));
 	hit1.setAttacks(6);
 	assertEquals(4+2*2/3., hit1.roll(), 0.01);
     }
@@ -62,7 +62,7 @@ public class UT_HitRoll {
     @Test
     public void roll_simpleR1() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(3, Skill.R1));
+	hit1.setSkill(new Skill(3, Skill.Reroll.Ones));
 	hit1.setAttacks(6);
 	assertEquals(4+1*2/3., hit1.roll(), 0.01);
     }
@@ -71,12 +71,12 @@ public class UT_HitRoll {
     @Test
     public void roll_simple_2R1is2RE() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(2, Skill.R1));
+	hit1.setSkill(new Skill(2, Skill.Reroll.Ones));
 	hit1.setAttacks(6);
 	double roll1 = hit1.roll();
 	
 	HitRoll hit2 = new HitRoll();
-	hit2.setSkill(new Skill(2, Skill.RE));
+	hit2.setSkill(new Skill(2, Skill.Reroll.MayAll));
 	hit2.setAttacks(6);
 	double roll2 = hit2.roll();
 	
@@ -105,7 +105,7 @@ public class UT_HitRoll {
     @Test
     public void roll_modRE_comp() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(3, Skill.RE, false));
+	hit1.setSkill(new Skill(3, Skill.Reroll.MustAll));
 	hit1.setAttacks(6);
 
 	hit1.setModifier(-1);
@@ -121,7 +121,7 @@ public class UT_HitRoll {
     @Test
     public void roll_modRE_opt() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(3, Skill.RE, true));
+	hit1.setSkill(new Skill(3, Skill.Reroll.MayAll));
 	hit1.setAttacks(6);
 
 	hit1.setModifier(-1);
@@ -159,7 +159,7 @@ public class UT_HitRoll {
     @Test
     public void roll_teslaRE() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(3, Skill.RE));
+	hit1.setSkill(new Skill(3, Skill.Reroll.MayAll));
 	hit1.setAttacks(6);
 	hit1.setAdditionnalHits(6, 2);
 	

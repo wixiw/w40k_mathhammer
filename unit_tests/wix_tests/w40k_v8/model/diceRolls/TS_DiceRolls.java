@@ -1,4 +1,4 @@
-package wix_tests.w40k.model.diceRolls;
+package wix_tests.w40k_v8.model.diceRolls;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

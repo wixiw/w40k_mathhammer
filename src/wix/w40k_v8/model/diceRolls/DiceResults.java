@@ -1,7 +1,7 @@
 /**
  * 
  */
-package wix.w40k.model.diceRolls;
+package wix.w40k_v8.model.diceRolls;
 
 import java.security.InvalidParameterException;
 

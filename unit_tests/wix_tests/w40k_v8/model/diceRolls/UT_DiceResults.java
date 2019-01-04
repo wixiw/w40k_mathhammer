@@ -1,7 +1,7 @@
 /**
  * 
  */
-package wix_tests.w40k.model.diceRolls;
+package wix_tests.w40k_v8.model.diceRolls;
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import wix.w40k.model.diceRolls.DiceResults;
+import wix.w40k_v8.model.diceRolls.DiceResults;
 
 /**
  * @author wix
@@ -22,7 +22,7 @@ public class UT_DiceResults {
     public final ExpectedException exception = ExpectedException.none();
     
     /**
-     * Test method for {@link wix.w40k.model.diceRolls.DiceResults#getResultsForFace(int)}.
+     * Test method for {@link wix.w40k_v8.model.diceRolls.DiceResults#getResultsForFace(int)}.
      */
     @Test
     public void getResultsForFace() {
@@ -40,7 +40,7 @@ public class UT_DiceResults {
     }
     
     /**
-     * Test method for {@link wix.w40k.model.diceRolls.DiceResults#setResultsForFace(int, double)}.
+     * Test method for {@link wix.w40k_v8.model.diceRolls.DiceResults#setResultsForFace(int, double)}.
      */
     @Test
     public void setResultsForFace() {
@@ -62,7 +62,7 @@ public class UT_DiceResults {
     }
 
     /**
-     * Test method for {@link wix.w40k.model.diceRolls.DiceResults#addRolls(DiceResults)}.
+     * Test method for {@link wix.w40k_v8.model.diceRolls.DiceResults#addRolls(DiceResults)}.
      */
     @Test
     public void addRolls() {
@@ -94,7 +94,7 @@ public class UT_DiceResults {
     }
     
     /**
-     * Test method for {@link wix.w40k.model.diceRolls.DiceResults#setValueForAtLeast(int, double)}.
+     * Test method for {@link wix.w40k_v8.model.diceRolls.DiceResults#setValueForAtLeast(int, double)}.
      */
     @Test
     public void setValueForAtLeast() {
@@ -110,7 +110,7 @@ public class UT_DiceResults {
     }
 
     /**
-     * Test method for {@link wix.w40k.model.diceRolls.DiceResults#countSuccess(int)}.
+     * Test method for {@link wix.w40k_v8.model.diceRolls.DiceResults#countSuccess(int)}.
      */
     @Test
     public void countSuccess() {
@@ -128,7 +128,7 @@ public class UT_DiceResults {
     }
 
     /**
-     * Test method for {@link wix.w40k.model.diceRolls.DiceResults#countFailures(int)}.
+     * Test method for {@link wix.w40k_v8.model.diceRolls.DiceResults#countFailures(int)}.
      */
     @Test
     public void countFailures() {
@@ -146,7 +146,7 @@ public class UT_DiceResults {
     }
     
     /**
-     * Test method for {@link wix.w40k.model.diceRolls.DiceResults#rerollDicesBelow(int)}.
+     * Test method for {@link wix.w40k_v8.model.diceRolls.DiceResults#rerollDicesBelow(int)}.
      */
     @Test
     public void rerollMisses() {
@@ -162,7 +162,7 @@ public class UT_DiceResults {
     }
     
     /**
-     * Test method for {@link wix.w40k.model.diceRolls.DiceResults#statsRollD6(double)}.
+     * Test method for {@link wix.w40k_v8.model.diceRolls.DiceResults#statsRollD6(double)}.
      */
     @Test
     public void statsRollD6() {

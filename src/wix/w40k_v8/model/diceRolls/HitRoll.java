@@ -1,11 +1,11 @@
 /**
  * 
  */
-package wix.w40k.model.diceRolls;
+package wix.w40k_v8.model.diceRolls;
 
 /**
  * @author wix
- * 
+ * This class represent a hit roll sequence (either for cloce combat or distance)
  */
 public class HitRoll {
 
@@ -130,19 +130,25 @@ public class HitRoll {
     {
 	//If allowed, reroll additional attacks failed dices
 	switch (skill.getRerolls()) {
-	case Skill.R1:
+	
+	case Ones:
 	    dices.rerollDicesBelow(2);
 	    break;
-
-	case Skill.RE:
-	    //If reroll capacity is optional and under a hit bonus, we can keep dices that would failed before modifier but would be ok with it.
-	    if(skill.isRerollOptional() && 0 < mod)
+	    
+	case MayAll:
+	    //If reroll capacity is optional and under a hit bonus
+	    //we can keep dices that would failed before modifier but would be ok with it.
+	    if( 0 < mod)
 		dices.rerollDicesBelow(skill.getValue()-mod);
 	    else
 		dices.rerollDicesBelow(skill.getValue());
 	    break;
+	    
+	case MustAll:
+	    dices.rerollDicesBelow(skill.getValue());
+	    break;
 
-	case Skill.RN:
+	case Nothing:
 	    break;
 
 	default:
