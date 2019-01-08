@@ -30,8 +30,11 @@ public class Skill {
      * Constructor
      * @param skillValue : the dice value to reach at least (or equal) to define a success
      * @param skillRerolls : the capacity to reroll fail tests, see RN, R1, RE
+     * @throw IllegalArgumentException if skill value is out of [2;6]
      */
     public Skill(int skillValue, Reroll skillRerolls) {
+	if( skillValue < 2  && 6 < skillValue)
+		throw new IllegalArgumentException();
 	value = skillValue;
 	rerolls = skillRerolls;
     }

@@ -3,79 +3,111 @@
  */
 package wix.w40k_v8.model.diceRolls;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.lang.Math;
+
 /**
- * @author wix
- * This class represent a hit roll sequence (either for cloce combat or distance)
+ * @author wix This class represent a hit roll sequence (either for cloce combat
+ *         or distance)
  */
 public class WoundRoll {
+    
+    public static class Wounds{
+	public double normal;
+	public double mortals;
+    }
 
     /** Number of attacks */
-    private double attacks;
-    
-    /** minimal score on dice to wound, computed from strength and toughness comparaison */
-    private int woundValue;
-    
-    /** An enumeration representing the wound roll reroll capacities, see \see Skill */
-    private Skill.Reroll woundReroll;
-    
+    protected double attacks;
+
+    /**
+     * minimal score on dice to wound, computed from strength and toughness
+     * comparaison
+     */
+    protected int woundValue;
+
+    /**
+     * An enumeration representing the wound roll reroll capacities, see \see
+     * Skill
+     */
+    protected Skill.Reroll woundReroll;
+
     /** Wound modifier */
-    private int mod;
-    
+    protected int mod;
+
     /** poisonned attacks never wound worse than this value */
-    private int poisonValue;
-    
+    protected int poisonValue;
+
     /** minimal score on dice to create additional hits */
-    private int extraMWValue; 
-    
+    protected int extraMWValue;
+
     /** number of additional hit created on each "extraHitsValue" success */
-    private int extraMWCount; 
-    
-    /** is true if the extra mortal wound replace the wound roll, false if it is generated in addition to the wound*/
-    private boolean extraMWReplaceWound; 
-    
+    protected int extraMWCount;
+
+    /**
+     * is true if the extra mortal wound replace the wound roll, false if it is
+     * generated in addition to the wound
+     */
+    protected boolean extraMWReplaceWound;
+
     /**
      * Configure the number of attacks (dices) in the roll
+     * 
      * @param attacksCount
+     *            shall be stricly positive of throw IllegalArgumentException
      */
     public void setAttacks(double attacksCount) {
-	assert 0 <= attacksCount;
+	if (attacksCount <= 0)
+	    throw new IllegalArgumentException();
 	attacks = attacksCount;
     }
 
     /**
      * Setup the 2 models in combat
-     * @param attS the strength charateristic of the attacker
-     * @param defT the toughness of the defenser
-     * @param reroll an enumeration of reroll capacities see \see Skill
+     * 
+     * @param attS
+     *            the strength charateristic of the attacker, shall be positive
+     *            and non null, else throw IllegalArgumentException
+     * @param defT
+     *            the toughness of the defenser, shall be positive and non null,
+     *            else throw IllegalArgumentException
+     * @param reroll
+     *            an enumeration of reroll capacities of the attacker see \see Skill
      * @return the minimal wound dice result to make a success
      */
     public int setModels(int attS, int defT, Skill.Reroll reroll) {
-	assert 1 <= attS && 1<= defT;
+	if (attS <= 0 || defT <= 0)
+	    throw new IllegalArgumentException();
 
 	woundReroll = reroll;
-	
-	//equality case
+
+	// equality case
 	woundValue = 4;
-	
-	if( defT < attS)
+
+	if (defT < attS)
 	    woundValue = 3;
-	    
-	if(2*defT <= attS)
+
+	if (2 * defT <= attS)
 	    woundValue = 2;
-	
+
 	if (attS < defT)
 	    woundValue = 5;
-	
-	if(2*attS <= defT)
+
+	if (2 * attS <= defT)
 	    woundValue = 6;
-	
+
 	return woundValue;
     }
-    
+
     /**
      * Setup the 2 models in combat (no wound reroll)
-     * @param attS the strength charateristic of the attacker
-     * @param defT the toughness of the defenser
+     * 
+     * @param attS
+     *            the strength charateristic of the attacker,,shall be positive
+     *            and non null, else throw IllegalArgumentException
+     * @param defT
+     *            the toughness of the defenser, shall be positive and non null,
+     *            else throw IllegalArgumentException
      * @return the minimal wound dice result to make a success
      */
     public int setModels(int attS, int defT) {
@@ -84,6 +116,7 @@ public class WoundRoll {
 
     /**
      * Dice result modifier (+1, -1, ...)
+     * 
      * @param modifier
      */
     public void setModifier(int modifier) {
@@ -91,8 +124,11 @@ public class WoundRoll {
     }
 
     /**
-     * Configure the attacking weapon to be poisoned (i.e.) never wound worst than the parameter value
-     * @param poisonRoll : the worst wound roll that end in a wound 
+     * Configure the attacking weapon to be poisoned (i.e.) never wound worst
+     * than the parameter value 
+     * 
+     * @param poisonRoll
+     *            : the worst wound roll that end in a wound
      */
     public void setPoison(int poisonRoll) {
 	poisonValue = poisonRoll;
@@ -100,14 +136,21 @@ public class WoundRoll {
 
     /**
      * Extra mortal wounds generated for some dice result
-     * @param minRoll minimal value to reach with the dice (equal or more)
-     * @param mortals the number of mortal wound generated
-     * @param replace set to true if the mortal wound is in place of the wound, false for in addition to the wound
-     *            number of new attacks generated by successful results
+     * 
+     * @param minRoll
+     *            minimal value to reach with the dice (equal or more), shall be
+     *            greather than 2, else throw IllegalArgumentException
+     * @param mortals
+     *            the number of mortal wound generated, shall be positive and
+     *            non null, else throw IllegalArgumentException
+     * @param replace
+     *            set to true if the mortal wound is in place of the wound,
+     *            false for in addition to the wound number of new attacks
+     *            generated by successful results
      */
-    public void setAdditionnalHits(int minRoll, int mortals, boolean replace) {
-	assert 0 < minRoll;
-	assert 0 < mortals;
+    public void setMortalWounds(int minRoll, int mortals, boolean replace) {
+	if (minRoll <= 1 || mortals <= 0)
+	    throw new IllegalArgumentException();
 
 	extraMWValue = minRoll;
 	extraMWCount = mortals;
@@ -115,65 +158,68 @@ public class WoundRoll {
     }
 
     /**
-     * Roll the dices
-     * @return the number of successfull hits
+     * Roll the dices. setAttacks() and setModel() shall have been called
+     * before, else it will throw IllegalArgumentException
+     * 
+     * @return the number of successful wounds (normal and mortals)
      */
-    public double roll() {
-	//Check that minimal configuration has been done
-	if( attacks == 0 || woundValue == 0)
+    public Wounds roll() {
+	Wounds result = new Wounds();
+	
+	// Check that minimal configuration has been done
+	if (attacks == 0 || woundValue == 0)
 	    throw new IllegalArgumentException();
 
-	//Roll dices a first time
+	//Take poison into account
+	int woundSucess;
+	if(poisonValue != 0)
+	    woundSucess = poisonValue;
+	else
+	    woundSucess = woundValue - mod;
+	    
+	// Roll dices a first time
 	DiceResults dices = DiceResults.statsRollD6(attacks);
 
-//	//If allowed, reroll failed dices and add them to first Roll
-//	_rerollDices(dices);
-//	
-//	//If allowed create additional attacks
-//	if( explAttCount != 0 )
-//	{
-//	    //Roll extra attacks
-//	    double extraAttackCount = explAttCount*dices.countSuccess(explAttValue-mod);
-//	    DiceResults extraAttacks = DiceResults.statsRollD6(extraAttackCount);
-//	    
-//	    //If allowed, reroll additional attacks failed dices
-//	    _rerollDices(extraAttacks);
-//	    //Add extra attacks to first roll
-//	    dices.addRolls(extraAttacks);
-//	}
-//
-//	//Count success with modifier
-//	double success = dices.countSuccess(skill.getValue()-mod);
-//	
-//	//If allowed, create additional hits (like tesla)
-//	if( extraHitsCount != 0)
-//	    success += extraHitsCount*dices.countSuccess(extraHitsValue-mod);
-//	    
-//	return success;
-	return 0;
-    }
-    
-    
-    private void _rerollDices(DiceResults dices)
-    {
-	//If allowed, reroll additional attacks failed dices
-	switch (woundReroll) {
+	//If allowed, reroll failed dices and add them to first Roll
+	 _rerollDices(dices, woundSucess);
 	
+	//Count success
+	result.normal = dices.countSuccess(woundSucess);
+	
+	//Count extral mortal wounds
+	result.mortals =  extraMWCount*dices.countSuccess(extraMWValue - mod);
+	if(extraMWReplaceWound)
+	    result.normal -= result.mortals/extraMWCount;
+	
+	return result;
+    }
+
+    protected void _rerollDices(DiceResults dices, int woundSuccess) {
+	// If allowed, reroll additional attacks failed dices
+	switch (woundReroll) {
+
 	case Ones:
 	    dices.rerollDicesBelow(2);
 	    break;
-	    
+
 	case MayAll:
-	    //If reroll capacity is optional and under a hit bonus
-	    //we can keep dices that would failed before modifier but would be ok with it.
-	    if( 0 < mod)
-		dices.rerollDicesBelow(woundValue-mod);
+	    // If reroll capacity is optional and under a hit bonus
+	    // we can keep dices that would failed before modifier but would be
+	    // ok with it.
+	    if (0 < mod)
+		dices.rerollDicesBelow(woundSuccess);
 	    else
-		dices.rerollDicesBelow(woundValue);
+		if(poisonValue != 0)
+		    dices.rerollDicesBelow(Math.min(woundValue, poisonValue));
+		else
+		    dices.rerollDicesBelow(woundValue);
 	    break;
-	    
+
 	case MustAll:
-	    dices.rerollDicesBelow(woundValue);
+		if(poisonValue != 0)
+		    dices.rerollDicesBelow(Math.min(woundValue, poisonValue));
+		else
+		    dices.rerollDicesBelow(woundValue);
 	    break;
 
 	case Nothing:
