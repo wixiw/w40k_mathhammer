@@ -32,7 +32,7 @@ public class HitRoll {
 
     /**
      * Configure the number of attacks (dices) in the roll
-     * 
+     * Compulsory call before roll()
      * @param attacksCount
      *            shall be positive of throw IllegalArgumentException
      */
@@ -44,7 +44,7 @@ public class HitRoll {
 
     /**
      * Set the skill of the model making the roll
-     * 
+     * Compulsory call before roll()
      * @param s
      */
     public void setSkill(Skill s) {

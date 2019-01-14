@@ -7,8 +7,8 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.lang.Math;
 
 /**
- * @author wix This class represent a hit roll sequence (either for cloce combat
- *         or distance)
+ * @author wix This class represent a hit roll sequence (either for close combat
+ *         or distance shooting)
  */
 public class WoundRoll {
     
@@ -17,8 +17,8 @@ public class WoundRoll {
 	public double mortals;
     }
 
-    /** Number of attacks */
-    protected double attacks;
+    /** Number of hits in the previous roll */
+    protected double hits;
 
     /**
      * minimal score on dice to wound, computed from strength and toughness
@@ -30,7 +30,7 @@ public class WoundRoll {
      * An enumeration representing the wound roll reroll capacities, see \see
      * Skill
      */
-    protected Skill.Reroll woundReroll;
+    protected DiceResults.Reroll woundReroll;
 
     /** Wound modifier */
     protected int mod;
@@ -51,15 +51,15 @@ public class WoundRoll {
     protected boolean extraMWReplaceWound;
 
     /**
-     * Configure the number of attacks (dices) in the roll
+     * Configure the number of hits (dices) in the roll
      * 
-     * @param attacksCount
+     * @param hitsCount
      *            shall be stricly positive of throw IllegalArgumentException
      */
-    public void setAttacks(double attacksCount) {
-	if (attacksCount <= 0)
+    public void setHitCount(double hitsCount) {
+	if (hitsCount <= 0)
 	    throw new IllegalArgumentException();
-	attacks = attacksCount;
+	hits = hitsCount;
     }
 
     /**
@@ -75,7 +75,7 @@ public class WoundRoll {
      *            an enumeration of reroll capacities of the attacker see \see Skill
      * @return the minimal wound dice result to make a success
      */
-    public int setModels(int attS, int defT, Skill.Reroll reroll) {
+    public int setModels(int attS, int defT, DiceResults.Reroll reroll) {
 	if (attS <= 0 || defT <= 0)
 	    throw new IllegalArgumentException();
 
@@ -111,7 +111,7 @@ public class WoundRoll {
      * @return the minimal wound dice result to make a success
      */
     public int setModels(int attS, int defT) {
-	return setModels(attS, defT, Skill.Reroll.Nothing);
+	return setModels(attS, defT, DiceResults.Reroll.Nothing);
     }
 
     /**
@@ -167,7 +167,7 @@ public class WoundRoll {
 	Wounds result = new Wounds();
 	
 	// Check that minimal configuration has been done
-	if (attacks == 0 || woundValue == 0)
+	if (hits == 0 || woundValue == 0)
 	    throw new IllegalArgumentException();
 
 	//Take poison into account
@@ -178,7 +178,7 @@ public class WoundRoll {
 	    woundSucess = woundValue - mod;
 	    
 	// Roll dices a first time
-	DiceResults dices = DiceResults.statsRollD6(attacks);
+	DiceResults dices = DiceResults.statsRollD6(hits);
 
 	//If allowed, reroll failed dices and add them to first Roll
 	 _rerollDices(dices, woundSucess);

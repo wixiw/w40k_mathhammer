@@ -9,8 +9,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import wix.w40k_v8.model.diceRolls.Skill;
 import wix.w40k_v8.model.diceRolls.WoundRoll;
+import wix.w40k_v8.model.diceRolls.DiceResults;
 
 /**
  * @author wix
@@ -29,16 +29,16 @@ public class UT_WoundRoll {
 
     /**
      * Test method for
-     * {@link wix.w40k_v8.model.diceRolls.WoundRoll#setAttacks(double)}.
+     * {@link wix.w40k_v8.model.diceRolls.WoundRoll#setHitCount(double)}.
      */
     @Test
     public void testSetAttacks() {
 	WoundRoll dices = new WoundRoll();
-	dices.setAttacks(2);
+	dices.setHitCount(2);
 
 	exception.expect(IllegalArgumentException.class);
-	dices.setAttacks(0);
-	dices.setAttacks(-2);
+	dices.setHitCount(0);
+	dices.setHitCount(-2);
     }
 
     /**
@@ -115,7 +115,7 @@ public class UT_WoundRoll {
     @Test
     public void testRoll_simple() {
 	WoundRoll dices = new WoundRoll();
-	dices.setAttacks(6);
+	dices.setHitCount(6);
 
 	// S == T : 3 success on 6 dices
 	dices.setModels(4, 4);
@@ -150,7 +150,7 @@ public class UT_WoundRoll {
     @Test
     public void testRoll_extraMortals() {
 	WoundRoll dices = new WoundRoll();
-	dices.setAttacks(6);
+	dices.setHitCount(6);
 	dices.setModels(4, 4);
 
 	//On 6+ proc 2 mortals that replace the normal success
@@ -172,20 +172,20 @@ public class UT_WoundRoll {
     @Test
     public void testRoll_reroll() {
 	WoundRoll dices = new WoundRoll();
-	dices.setAttacks(6);
+	dices.setHitCount(6);
 
 	//On 4+ reroll ones, 3 success first time, 1 reroll thats gives 0.5 for a total of 3.5
-	dices.setModels(4, 4, Skill.Reroll.Ones);
+	dices.setModels(4, 4, DiceResults.Reroll.Ones);
 	assertEquals(3.5, dices.roll().normal, 0.01);
 	assertEquals(0, dices.roll().mortals, 0.01);
 
 	//On 4+ reroll all, 3 success first time, 3 reroll thats gives 1.5 for a total of 4.5
-	dices.setModels(4, 4, Skill.Reroll.MayAll);
+	dices.setModels(4, 4, DiceResults.Reroll.MayAll);
 	assertEquals(4.5, dices.roll().normal, 0.01);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Idem with "must" instead of "may", as there is no mod, it's the same result
-	dices.setModels(4, 4, Skill.Reroll.MustAll);
+	dices.setModels(4, 4, DiceResults.Reroll.MustAll);
 	assertEquals(4.5, dices.roll().normal, 0.01);
 	assertEquals(0, dices.roll().mortals, 0.01);
     }
@@ -197,7 +197,7 @@ public class UT_WoundRoll {
     @Test
     public void testRoll_modifiers() {
 	WoundRoll dices = new WoundRoll();
-	dices.setAttacks(6);
+	dices.setHitCount(6);
 	dices.setModels(4, 4);
 	
 	//With equal S and T a malus (-1) give 5+, hence 2 success
@@ -223,7 +223,7 @@ public class UT_WoundRoll {
     @Test
     public void testRoll_poison() {
 	WoundRoll dices = new WoundRoll();
-	dices.setAttacks(6);
+	dices.setHitCount(6);
 	dices.setModels(3, 8);
 	
 	//normal throw
@@ -253,7 +253,7 @@ public class UT_WoundRoll {
     @Test
     public void testRoll_allMods_R1() {
 	WoundRoll dices = new WoundRoll();
-	dices.setAttacks(6);
+	dices.setHitCount(6);
 
 	//normal throw 6+ to wound => 1 success
 	dices.setModels(3, 8);
@@ -261,52 +261,52 @@ public class UT_WoundRoll {
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Normal throw 6+ to wound, with reroll ones => 1+1*1/6 success
-	dices.setModels(3, 8, Skill.Reroll.Ones);
+	dices.setModels(3, 8, DiceResults.Reroll.Ones);
 	assertEquals(7/6., dices.roll().normal , 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poisonned throw, 5+ to wound, with reroll ones => 2+1*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.Ones);
+	dices.setModels(3, 8, DiceResults.Reroll.Ones);
 	dices.setPoison(5);
 	assertEquals(14/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poisonned + Malus -1 to wound, 5+ to wound, with reroll ones => 2+1*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.Ones);
+	dices.setModels(3, 8, DiceResults.Reroll.Ones);
 	dices.setPoison(5);
 	dices.setModifier(-1);
 	assertEquals(14/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Bonus to wound, 5+ to wound, with reroll ones => 2+1*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.Ones);
+	dices.setModels(3, 8, DiceResults.Reroll.Ones);
 	dices.setModifier(+1);
 	assertEquals(14/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poison + Bonus +1 to wound, 5+ to wound, with reroll ones => 2+1*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.Ones);
+	dices.setModels(3, 8, DiceResults.Reroll.Ones);
 	dices.setModifier(+1);
 	dices.setPoison(5);
 	assertEquals(14/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Bonus +2 to wound, 4+ to wound, with reroll ones => 3+1*3/6 success
-	dices.setModels(3, 8, Skill.Reroll.Ones);
+	dices.setModels(3, 8, DiceResults.Reroll.Ones);
 	dices.setModifier(+2);
 	dices.setPoison(0);
 	assertEquals(21/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poison + Bonus +2 to wound, 4+ to wound, with reroll ones => 2+1*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.Ones);
+	dices.setModels(3, 8, DiceResults.Reroll.Ones);
 	dices.setModifier(+2);
 	dices.setPoison(5);
 	assertEquals(14/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poison throw, 4+ to wound, with reroll ones, 1 extra mortal on 6+ => 3+1*3/6 success and 1+1*1/6 mortals
-	dices.setModels(3, 8, Skill.Reroll.Ones);
+	dices.setModels(3, 8, DiceResults.Reroll.Ones);
 	dices.setPoison(4);
 	dices.setModifier(0);
 	dices.setMortalWounds(6, 1, false);
@@ -314,7 +314,7 @@ public class UT_WoundRoll {
 	assertEquals(7/6., dices.roll().mortals, 0.01);
 	
 	//Bonus +1, 5+ to wound, with reroll ones, 1 extra mortal on 6+ (becomes 5+) => 2+1*2/6 success and mortals
-	dices.setModels(3, 8, Skill.Reroll.Ones);
+	dices.setModels(3, 8, DiceResults.Reroll.Ones);
 	dices.setPoison(0);
 	dices.setModifier(+1);
 	dices.setMortalWounds(6, 1, false);
@@ -329,69 +329,69 @@ public class UT_WoundRoll {
     @Test
     public void testRoll_allMods_MayRerollAll() {
 	WoundRoll dices = new WoundRoll();
-	dices.setAttacks(6);
+	dices.setHitCount(6);
 	
 	//Malus -1 to wound, 5+ to wound, with reroll all but 4 => 2+3*2/6 success
-	dices.setModels(4, 4, Skill.Reroll.MustAll);
+	dices.setModels(4, 4, DiceResults.Reroll.MustAll);
 	dices.setModifier(-1);
 	assertEquals(18/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Malus +1 to wound, 3+ to wound, with reroll all => 3+3*4/6 success
-	dices.setModels(4, 4, Skill.Reroll.MustAll);
+	dices.setModels(4, 4, DiceResults.Reroll.MustAll);
 	dices.setModifier(+1);
 	assertEquals(30/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 
 	//Normal throw 6+ to wound, with reroll all => 1+5*1/6 success
-	dices.setModels(3, 8, Skill.Reroll.MayAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MayAll);
 	dices.setModifier(0);
 	assertEquals(11/6., dices.roll().normal , 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poisonned throw, 5+ to wound, with reroll all => 2+4*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.MayAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MayAll);
 	dices.setPoison(5);
 	assertEquals(20/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poisonned + Malus -1 to wound, 5+ to wound, with reroll all => 2+4*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.MayAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MayAll);
 	dices.setPoison(5);
 	dices.setModifier(-1);
 	assertEquals(20/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Bonus to wound, 5+ to wound, with reroll all => 2+4*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.MayAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MayAll);
 	dices.setModifier(+1);
 	assertEquals(20/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poison + Bonus +1 to wound, 5+ to wound, with reroll all => 2+4*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.MayAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MayAll);
 	dices.setModifier(+1);
 	dices.setPoison(5);
 	assertEquals(20/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Bonus +2 to wound, 4+ to wound, with reroll all => 3+3*3/6 success
-	dices.setModels(3, 8, Skill.Reroll.MayAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MayAll);
 	dices.setModifier(+2);
 	dices.setPoison(0);
 	assertEquals(27/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poison + Bonus +2 to wound, 5+ to wound, with reroll all => 2+4*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.MayAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MayAll);
 	dices.setModifier(+2);
 	dices.setPoison(5);
 	assertEquals(20/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poison throw, 4+ to wound, with reroll all, 1 extra mortal on 6+ => 3+3*3/6 success and 1+3*1/6 mortals
-	dices.setModels(3, 8, Skill.Reroll.MayAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MayAll);
 	dices.setPoison(4);
 	dices.setModifier(0);
 	dices.setMortalWounds(6, 1, false);
@@ -399,7 +399,7 @@ public class UT_WoundRoll {
 	assertEquals(9/6., dices.roll().mortals, 0.01);
 	
 	//Bonus +1, 5+ to wound, with reroll all, 1 extra mortal on 6+ (becomes 5+) => 2+4*2/6 success and mortals
-	dices.setModels(3, 8, Skill.Reroll.MayAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MayAll);
 	dices.setPoison(0);
 	dices.setModifier(+1);
 	dices.setMortalWounds(6, 1, false);
@@ -414,29 +414,29 @@ public class UT_WoundRoll {
     @Test
     public void testRoll_allMods_MustRerollAll() {
 	WoundRoll dices = new WoundRoll();
-	dices.setAttacks(6);
+	dices.setHitCount(6);
 
 	//Malus -1 to wound, 5+ to wound, with reroll all but 4 => 2+3*2/6 success
-	dices.setModels(4, 4, Skill.Reroll.MustAll);
+	dices.setModels(4, 4, DiceResults.Reroll.MustAll);
 	dices.setModifier(-1);
 	assertEquals(18/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Malus +1 to wound, 3+ to wound, with reroll all => 3+3*4/6 success
-	dices.setModels(4, 4, Skill.Reroll.MustAll);
+	dices.setModels(4, 4, DiceResults.Reroll.MustAll);
 	dices.setModifier(+1);
 	assertEquals(30/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poison Malus -1 to wound, 4+ to wound, with reroll all => 3+3*3/6 success
-	dices.setModels(4, 4, Skill.Reroll.MustAll);
+	dices.setModels(4, 4, DiceResults.Reroll.MustAll);
 	dices.setModifier(-1);
 	dices.setPoison(4);
 	assertEquals(27/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poison Bonus +1 to wound, 4+ to wound, with reroll all => 3+3*3/6 success
-	dices.setModels(3, 8, Skill.Reroll.MustAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MustAll);
 	dices.setModifier(-1);
 	dices.setPoison(4);
 	assertEquals(27/6., dices.roll().normal, 0.001);
@@ -444,54 +444,54 @@ public class UT_WoundRoll {
 	
 	
 	//Normal throw 6+ to wound, with reroll all => 1+5*1/6 success
-	dices.setModels(3, 8, Skill.Reroll.MustAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MustAll);
 	dices.setModifier(0);
 	dices.setPoison(0);
 	assertEquals(11/6., dices.roll().normal , 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poisonned throw, 5+ to wound, with reroll all => 2+4*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.MustAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MustAll);
 	dices.setPoison(5);
 	assertEquals(20/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poisonned + Malus -1 to wound, 5+ to wound, with reroll all => 2+4*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.MustAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MustAll);
 	dices.setPoison(5);
 	dices.setModifier(-1);
 	assertEquals(20/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Bonus to wound, 5+ to wound, with reroll all => 2+4*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.MustAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MustAll);
 	dices.setModifier(+1);
 	assertEquals(20/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poison + Bonus +1 to wound, 5+ to wound, with reroll all => 2+4*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.MustAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MustAll);
 	dices.setModifier(+1);
 	dices.setPoison(5);
 	assertEquals(20/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Bonus +2 to wound, 4+ to wound, with reroll all (include success) => 1+5*3/6 success
-	dices.setModels(3, 8, Skill.Reroll.MustAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MustAll);
 	dices.setModifier(+2);
 	dices.setPoison(0);
 	assertEquals(21/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poison + Bonus +2 to wound, 5+ to wound, with reroll all (include success) => 2+4*2/6 success
-	dices.setModels(3, 8, Skill.Reroll.MustAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MustAll);
 	dices.setModifier(+2);
 	dices.setPoison(5);
 	assertEquals(20/6., dices.roll().normal, 0.001);
 	assertEquals(0, dices.roll().mortals, 0.01);
 	
 	//Poison throw, 4+ to wound, with reroll all, 1 extra mortal on 6+ => 3+3*3/6 success and 1+3*1/6 mortals
-	dices.setModels(3, 8, Skill.Reroll.MustAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MustAll);
 	dices.setPoison(4);
 	dices.setModifier(0);
 	dices.setMortalWounds(6, 1, false);
@@ -499,7 +499,7 @@ public class UT_WoundRoll {
 	assertEquals(9/6., dices.roll().mortals, 0.01);
 	
 	//Bonus +1, 5+ to wound, with reroll all, 1 extra mortal on 6+ (becomes 5+) => 1+5*2/6 success and mortals
-	dices.setModels(3, 8, Skill.Reroll.MustAll);
+	dices.setModels(3, 8, DiceResults.Reroll.MustAll);
 	dices.setPoison(0);
 	dices.setModifier(+1);
 	dices.setMortalWounds(6, 1, false);
