@@ -1,4 +1,4 @@
-package wix_tests.w40k_v8.model.diceRolls;
+package wix_tests.w40k_v10.model.diceRolls;
 
 import static org.junit.Assert.*;
 
@@ -6,9 +6,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import wix.w40k_v8.model.diceRolls.HitRoll;
-import wix.w40k_v8.model.diceRolls.Skill;
-import wix.w40k_v8.model.diceRolls.DiceResults;
+import wix.w40k_v10.model.diceRolls.DiceRoll;
+import wix.w40k_v10.model.diceRolls.HitRoll;
+import wix.w40k_v10.model.diceRolls.Skill;
 
 public class UT_HitRoll {
     @Rule
@@ -54,7 +54,7 @@ public class UT_HitRoll {
     @Test
     public void roll_simpleRE() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(3, DiceResults.Reroll.MayAll));
+	hit1.setSkill(new Skill(3, DiceRoll.RerollType.MayAll));
 	hit1.setAttacks(6);
 	assertEquals(4+2*2/3., hit1.roll(), 0.01);
     }
@@ -63,7 +63,7 @@ public class UT_HitRoll {
     @Test
     public void roll_simpleR1() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(3, DiceResults.Reroll.Ones));
+	hit1.setSkill(new Skill(3, DiceRoll.RerollType.Ones));
 	hit1.setAttacks(6);
 	assertEquals(4+1*2/3., hit1.roll(), 0.01);
     }
@@ -72,12 +72,12 @@ public class UT_HitRoll {
     @Test
     public void roll_simple_2R1is2RE() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(2, DiceResults.Reroll.Ones));
+	hit1.setSkill(new Skill(2, DiceRoll.RerollType.Ones));
 	hit1.setAttacks(6);
 	double roll1 = hit1.roll();
 	
 	HitRoll hit2 = new HitRoll();
-	hit2.setSkill(new Skill(2, DiceResults.Reroll.MayAll));
+	hit2.setSkill(new Skill(2, DiceRoll.RerollType.MayAll));
 	hit2.setAttacks(6);
 	double roll2 = hit2.roll();
 	
@@ -106,7 +106,7 @@ public class UT_HitRoll {
     @Test
     public void roll_modRE_comp() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(3, DiceResults.Reroll.MustAll));
+	hit1.setSkill(new Skill(3, DiceRoll.RerollType.MustAll));
 	hit1.setAttacks(6);
 
 	hit1.setModifier(-1);
@@ -122,7 +122,7 @@ public class UT_HitRoll {
     @Test
     public void roll_modRE_opt() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(3, DiceResults.Reroll.MayAll));
+	hit1.setSkill(new Skill(3, DiceRoll.RerollType.MayAll));
 	hit1.setAttacks(6);
 
 	hit1.setModifier(-1);
@@ -160,7 +160,7 @@ public class UT_HitRoll {
     @Test
     public void roll_teslaRE() {
 	HitRoll hit1 = new HitRoll();
-	hit1.setSkill(new Skill(3, DiceResults.Reroll.MayAll));
+	hit1.setSkill(new Skill(3, DiceRoll.RerollType.MayAll));
 	hit1.setAttacks(6);
 	hit1.setAdditionnalHits(6, 2);
 	

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package wix.w40k_v8.model.diceRolls;
+package wix.w40k_v10.model.diceRolls;
 
 /**
  * @author wix This class represent a save roll sequence and associated damages

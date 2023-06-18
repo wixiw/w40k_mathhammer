@@ -3,7 +3,7 @@
 This project allows to compute statistics on dice rolls. It aims at automating stats analysis.
 
 * ```old```: contains old versions/trials for that tool
-* ```src```: contains application and test code
+* ```src```: contains application and test code ([see more information](src/main/java/wix/w40k_v8/model/diceRolls/Readme.md))
 * ```target```: (local) created to hold compiled code
 
 ## Dev Env

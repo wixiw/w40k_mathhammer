@@ -1,7 +1,7 @@
 /**
  * 
  */
-package wix.w40k_v8.model.diceRolls;
+package wix.w40k_v10.model.diceRolls;
 
 /**
  * @author wix This class statistically roll n-faces dices. All dices in the
@@ -48,8 +48,8 @@ public class StatisticalRoll {
      * be rerolled against a success value, then the results can be modified
      * (after the rerolls)
      */
-    public DiceResults roll(double diceCount) {
-	return new DiceResults(faces);
+    public DiceRoll roll(double diceCount) {
+	return new DiceRoll(faces);
     }
 
 }

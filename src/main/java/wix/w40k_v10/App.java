@@ -1,4 +1,4 @@
-package wix.w40k_v8;
+package wix.w40k_v10;
 
 /**
  * Hello world!

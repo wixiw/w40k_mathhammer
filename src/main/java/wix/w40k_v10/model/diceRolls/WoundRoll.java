@@ -1,7 +1,7 @@
 /**
  * 
  */
-package wix.w40k_v8.model.diceRolls;
+package wix.w40k_v10.model.diceRolls;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.lang.Math;
@@ -30,7 +30,7 @@ public class WoundRoll {
      * An enumeration representing the wound roll reroll capacities, see \see
      * Skill
      */
-    protected DiceResults.Reroll woundReroll;
+    protected DiceRoll.RerollType woundReroll;
 
     /** Wound modifier */
     protected int mod;
@@ -75,7 +75,7 @@ public class WoundRoll {
      *            an enumeration of reroll capacities of the attacker see \see Skill
      * @return the minimal wound dice result to make a success
      */
-    public int setModels(int attS, int defT, DiceResults.Reroll reroll) {
+    public int setModels(int attS, int defT, DiceRoll.RerollType reroll) {
 	if (attS <= 0 || defT <= 0)
 	    throw new IllegalArgumentException();
 
@@ -111,7 +111,7 @@ public class WoundRoll {
      * @return the minimal wound dice result to make a success
      */
     public int setModels(int attS, int defT) {
-	return setModels(attS, defT, DiceResults.Reroll.Nothing);
+	return setModels(attS, defT, DiceRoll.RerollType.Nothing);
     }
 
     /**
@@ -178,7 +178,7 @@ public class WoundRoll {
 	    woundSucess = woundValue - mod;
 	    
 	// Roll dices a first time
-	DiceResults dices = DiceResults.statsRollD6(hits);
+	DiceRoll dices = DiceRoll.statsRollD6(hits);
 
 	//If allowed, reroll failed dices and add them to first Roll
 	 _rerollDices(dices, woundSucess);
@@ -194,7 +194,7 @@ public class WoundRoll {
 	return result;
     }
 
-    protected void _rerollDices(DiceResults dices, int woundSuccess) {
+    protected void _rerollDices(DiceRoll dices, int woundSuccess) {
 	// If allowed, reroll additional attacks failed dices
 	switch (woundReroll) {
 

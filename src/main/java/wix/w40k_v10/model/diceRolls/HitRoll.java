@@ -1,7 +1,7 @@
 /**
  * 
  */
-package wix.w40k_v8.model.diceRolls;
+package wix.w40k_v10.model.diceRolls;
 
 /**
  * @author wix This class represent a hit roll sequence (either for cloce combat
@@ -107,7 +107,7 @@ public class HitRoll {
 	    throw new IllegalArgumentException();
 
 	// Roll dices a first time
-	DiceResults dices = DiceResults.statsRollD6(attacks);
+	DiceRoll dices = DiceRoll.statsRollD6(attacks);
 
 	// If allowed, reroll failed dices and add them to first Roll
 	_rerollDices(dices);
@@ -116,12 +116,12 @@ public class HitRoll {
 	if (explAttCount != 0) {
 	    // Roll extra attacks
 	    double extraAttackCount = explAttCount * dices.countSuccess(explAttValue - mod);
-	    DiceResults extraAttacks = DiceResults.statsRollD6(extraAttackCount);
+	    DiceRoll extraAttacks = DiceRoll.statsRollD6(extraAttackCount);
 
 	    // If allowed, reroll additional attacks failed dices
 	    _rerollDices(extraAttacks);
 	    // Add extra attacks to first roll
-	    dices.addRolls(extraAttacks);
+	    dices.combineRolls(extraAttacks);
 	}
 
 	// Count success with modifier
@@ -134,7 +134,7 @@ public class HitRoll {
 	return success;
     }
 
-    protected void _rerollDices(DiceResults dices) {
+    protected void _rerollDices(DiceRoll dices) {
 	// If allowed, reroll additional attacks failed dices
 	switch (skill.getRerolls()) {
 

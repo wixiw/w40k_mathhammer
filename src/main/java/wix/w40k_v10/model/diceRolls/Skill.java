@@ -1,7 +1,7 @@
 /**
  * 
  */
-package wix.w40k_v8.model.diceRolls;
+package wix.w40k_v10.model.diceRolls;
 
 /**
  * @author wix
@@ -16,7 +16,7 @@ public class Skill {
     private int value;
     
     /** Memorize if the skill allows to reroll */
-    private DiceResults.Reroll rerolls;
+    private DiceRoll.RerollType rerolls;
     
     /**
      * Constructor
@@ -24,7 +24,7 @@ public class Skill {
      * @param skillRerolls : the capacity to reroll fail tests, see RN, R1, RE
      * @throw IllegalArgumentException if skill value is out of [2;6]
      */
-    public Skill(int skillValue, DiceResults.Reroll skillRerolls) {
+    public Skill(int skillValue, DiceRoll.RerollType skillRerolls) {
 	if( skillValue < 2  && 6 < skillValue)
 		throw new IllegalArgumentException();
 	value = skillValue;
@@ -36,14 +36,14 @@ public class Skill {
      * @param skillValue : the dice value to reach at least (or equal) to define a success
      */
     public Skill(int skillValue) {
-	this(skillValue, DiceResults.Reroll.Nothing);
+	this(skillValue, DiceRoll.RerollType.Nothing);
     }
 
     public int getValue() {
 	return value;
     }
     
-    public DiceResults.Reroll getRerolls() {
+    public DiceRoll.RerollType getRerolls() {
 	return rerolls;
     }
 }
