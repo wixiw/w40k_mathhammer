@@ -43,7 +43,7 @@ public class Skill {
 	return value;
     }
     
-    public DiceRoll.RerollType getRerolls() {
+    public DiceRoll.RerollType getRerolltype() {
 	return rerolls;
     }
 }

@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import wix.w40k_v10.model.diceRolls.DiceRoll;
+import wix.w40k_v10.model.diceRolls.RerollBehavior;
 
 /**
  * @author wix
@@ -146,22 +147,45 @@ public class UT_DiceResults {
     }
     
     /**
-     * Test method for {@link wix.w40k_v10.model.diceRolls.DiceRoll#rerollDicesBelow(int)}.
+     * Test method for {@link wix.w40k_v10.model.diceRolls.DiceRoll#rerollDicesStrictBelow(int)}.
      */
     @Test
-    public void rerollMisses() {
+    public void rerollDices() {
+		//No reroll
 	DiceRoll dices = new DiceRoll(new double[]{1, 1, 1, 1, 1, 1});
-	assertEquals(2, dices.rerollDicesBelow(3), 0.01);
+	dices.reroll(new RerollBehavior(RerollBehavior.Method.Nothing, 0));
+	assertEquals(dices.getCountForFace(1),    1, 0.01);
+	assertEquals(dices.getCountForFace(2),    1, 0.01);
+	assertEquals(dices.getCountForFace(3),    1, 0.01);
+	assertEquals(dices.getCountForFace(4),    1, 0.01);
+	assertEquals(dices.getCountForFace(5),    1, 0.01);
+	assertEquals(dices.getCountForFace(6),    1, 0.01);
+
+		//Reroll two's
+	dices = new DiceRoll(new double[]{1, 1, 1, 1, 1, 1});
+	dices.reroll(new RerollBehavior(RerollBehavior.Method.ResultOf, 2));
+	double face1 = dices.getCountForFace(1);
+	double face2 = dices.getCountForFace(2);
+	assertEquals(dices.getCountForFace(1),    1+1./6., 0.01);
+	assertEquals(dices.getCountForFace(2),    1./6.,   0.01);
+	assertEquals(dices.getCountForFace(3),    1+1./6, 0.01);
+	assertEquals(dices.getCountForFace(4),    1+1./6, 0.01);
+	assertEquals(dices.getCountForFace(5),    1+1./6, 0.01);
+	assertEquals(dices.getCountForFace(6),    1+1./6, 0.01);
 	
-	assertEquals(dices.getCountForFace(1),    0.333, 0.01);
-	assertEquals(dices.getCountForFace(2),    0.333, 0.01);
-	assertEquals(dices.getCountForFace(3),    1.333, 0.01);
-	assertEquals(dices.getCountForFace(4),    1.333, 0.01);
-	assertEquals(dices.getCountForFace(5),    1.333, 0.01);
-	assertEquals(dices.getCountForFace(6),    1.333, 0.01);
+		//FailForAtLeast 4
+	dices = new DiceRoll(new double[]{1, 1, 1, 1, 1, 1});
+	dices.reroll(new RerollBehavior(RerollBehavior.Method.FailForAtLeast, 4));
+	assertEquals(dices.getCountForFace(1),    3./6,   0.01);
+	assertEquals(dices.getCountForFace(2),    3./6,   0.01);
+	assertEquals(dices.getCountForFace(3),    3./6,   0.01);
+	assertEquals(dices.getCountForFace(4),    1+3./6, 0.01);
+	assertEquals(dices.getCountForFace(5),    1+3./6, 0.01);
+	assertEquals(dices.getCountForFace(6),    1+3./6, 0.01);
     }
-    
-    /**
+
+
+	/**
      * Test method for {@link wix.w40k_v10.model.diceRolls.DiceRoll#statsRollD6(double)}.
      */
     @Test

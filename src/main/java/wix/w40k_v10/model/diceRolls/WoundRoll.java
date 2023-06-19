@@ -199,7 +199,7 @@ public class WoundRoll {
 	switch (woundReroll) {
 
 	case Ones:
-	    dices.rerollDicesBelow(2);
+	    dices.rerollDicesStrictBelow(2);
 	    break;
 
 	case MayAll:
@@ -207,19 +207,19 @@ public class WoundRoll {
 	    // we can keep dices that would failed before modifier but would be
 	    // ok with it.
 	    if (0 < mod)
-		dices.rerollDicesBelow(woundSuccess);
+		dices.rerollDicesStrictBelow(woundSuccess);
 	    else
 		if(poisonValue != 0)
-		    dices.rerollDicesBelow(Math.min(woundValue, poisonValue));
+		    dices.rerollDicesStrictBelow(Math.min(woundValue, poisonValue));
 		else
-		    dices.rerollDicesBelow(woundValue);
+		    dices.rerollDicesStrictBelow(woundValue);
 	    break;
 
 	case MustAll:
 		if(poisonValue != 0)
-		    dices.rerollDicesBelow(Math.min(woundValue, poisonValue));
+		    dices.rerollDicesStrictBelow(Math.min(woundValue, poisonValue));
 		else
-		    dices.rerollDicesBelow(woundValue);
+		    dices.rerollDicesStrictBelow(woundValue);
 	    break;
 
 	case Nothing:
