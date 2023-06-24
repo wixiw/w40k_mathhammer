@@ -12,13 +12,13 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import wix.w40k_v10.model.diceRolls.DiceRoll;
-import wix.w40k_v10.model.diceRolls.RerollBehavior;
+import wix.w40k_v10.model.types.RerollBehavior;
 
 /**
  * @author wix
  *
  */
-public class UT_DiceResults {
+public class UT_DiceRoll {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
     

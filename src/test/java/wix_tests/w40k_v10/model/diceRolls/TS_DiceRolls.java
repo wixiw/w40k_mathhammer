@@ -6,7 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-    UT_DiceResults.class, 
+    UT_DiceRoll.class, 
     UT_HitRoll.class ,
     UT_WoundRoll.class
     })

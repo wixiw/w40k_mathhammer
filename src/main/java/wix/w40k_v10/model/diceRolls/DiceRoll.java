@@ -5,6 +5,8 @@ package wix.w40k_v10.model.diceRolls;
 
 import java.security.InvalidParameterException;
 
+import wix.w40k_v10.model.types.RerollBehavior;
+
 /**
  * @author wix This class represent a dice roll of the same dice types.
  *         It represent the dice results under the form of a

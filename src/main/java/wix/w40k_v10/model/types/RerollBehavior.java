@@ -1,4 +1,4 @@
-package wix.w40k_v10.model.diceRolls;
+package wix.w40k_v10.model.types;
 
 /**
  * Represent a mean to reroll dices
