@@ -92,6 +92,14 @@ public class DiceRoll {
     }
 
     /**
+     * Get the list of result for all faces
+     * @return
+     */
+    public double[] getCounts(){
+        return results.clone();
+    }
+
+    /**
      * Merge two dice rolls Throw an exception is dice rolls are not for the
      * same dice types
      * 
