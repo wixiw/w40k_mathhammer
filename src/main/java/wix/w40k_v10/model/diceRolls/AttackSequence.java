@@ -1,7 +1,5 @@
 package wix.w40k_v10.model.diceRolls;
 
-import java.util.ArrayList;
-
 import org.javatuples.Pair;
 
 import wix.w40k_v10.model.AttackingUnit;
@@ -12,8 +10,13 @@ import wix.w40k_v10.model.Weapon;
  * Object managing a w40K attacking sequence
  */
 public class AttackSequence {
-    public AttackingUnit att;
-    public DefensingUnit def;
+    private AttackingUnit att;
+    private DefensingUnit def;
+
+    public AttackSequence(AttackingUnit _att, DefensingUnit _def){
+        att = _att;
+        def = _def;
+    }
 
     /**
      * Roll hit, wound and saves
@@ -34,7 +37,7 @@ public class AttackSequence {
 
             //Check lost models
                 //TODO makes the maths
-            lostModels += 0;
+            lostModels += hploss;
         }
 
         return lostModels;
@@ -73,20 +76,22 @@ public class AttackSequence {
     private double statSaveRoll(Weapon weapon, double wounds) {
         DiceRoll saveRoll = DiceRoll.statsRollD6(wounds);
             //TODO makes the save roll
-        double failedSaves = 0;
+        int modifiedSave = def.armorSave;
+
+        double failedSaves = saveRoll.countFailures(modifiedSave);
         return failedSaves;
     }
 
     private double statDmgRoll(Weapon weapon, double failedSaves) {
-        DiceRoll dmgRoll = DiceRoll.statsRollD6(failedSaves);
+        //DiceRoll dmgRoll = DiceRoll.statsRollD6(failedSaves);
             //TODO makes the dmg roll
-        double dmg = 0;
+        double dmg = failedSaves;
         return dmg;
     }
 
     private double statFnpRoll(double dmg) {
         DiceRoll fnpRoll = DiceRoll.statsRollD6(dmg);
             //TODO
-        return 0;
+        return dmg;
     }
 }

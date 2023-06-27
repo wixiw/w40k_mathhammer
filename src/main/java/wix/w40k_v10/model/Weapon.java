@@ -26,8 +26,19 @@ public class Weapon{
 
     public void check(){
         // Check that minimal configuration has been done
-        if (nbAtt <= 0 || hitSkill <= 0)
-        throw new IllegalArgumentException();
+        if (nbAtt <= 0 || hitSkill <= 0){
+            throw new IllegalArgumentException();
+        } 
+    }
+
+    public Weapon(int _nbAtt, int skill, int S){
+        nbAtt = _nbAtt;
+        hitSkill = skill;
+        strength = S;
+    }
+
+    private Weapon(){
+
     }
 }
 

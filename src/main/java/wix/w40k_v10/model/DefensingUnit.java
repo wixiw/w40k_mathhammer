@@ -10,5 +10,13 @@ public class DefensingUnit {
 
     public boolean hasCover = false;
     public boolean hasStealth = false;
+
+    private DefensingUnit(){};
+
+    public DefensingUnit(int T, int Svg, int Inv){
+        toughness = T;
+        armorSave = Svg;
+        invSave = Inv;
+    }
 }
 

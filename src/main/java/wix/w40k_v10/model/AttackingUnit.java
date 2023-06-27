@@ -8,7 +8,7 @@ import org.javatuples.Pair;
  */
 public class AttackingUnit {
     //Groups of the same weapon type
-    private ArrayList<Pair<Weapon, Integer>> groups;
+    private ArrayList<Pair<Weapon, Integer>> groups = new ArrayList<Pair<Weapon, Integer>>();
 
     public AttackingUnit(){
 
