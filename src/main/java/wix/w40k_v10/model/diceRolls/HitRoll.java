@@ -1,7 +1,7 @@
 package wix.w40k_v10.model.diceRolls;
 
 import wix.w40k_v10.model.AttackingUnit;
-import wix.w40k_v10.model.DefensingUnit;
+import wix.w40k_v10.model.Model;
 
 /**
  * @author wix This class represent a hit roll sequence (either for cloce combat
@@ -11,9 +11,9 @@ public class HitRoll {
     // Data representing the attacking group of models
     protected AttackingUnit att;
     // Data representing the defensing unit
-    protected DefensingUnit def;
+    protected Model def;
 
-    public HitRoll(AttackingUnit attacker, DefensingUnit defenser){
+    public HitRoll(AttackingUnit attacker, Model defenser){
         att = attacker;
         def = defenser;
     }

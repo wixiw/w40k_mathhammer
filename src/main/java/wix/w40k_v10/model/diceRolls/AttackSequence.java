@@ -1,19 +1,17 @@
 package wix.w40k_v10.model.diceRolls;
 
-import org.javatuples.Pair;
-
-import wix.w40k_v10.model.AttackingUnit;
-import wix.w40k_v10.model.DefensingUnit;
+import wix.w40k_v10.model.Model;
+import wix.w40k_v10.model.Unit;
 import wix.w40k_v10.model.Weapon;
 
 /**
  * Object managing a w40K attacking sequence
  */
 public class AttackSequence {
-    private AttackingUnit att;
-    private DefensingUnit def;
+    private Unit att;
+    private Model def;
 
-    public AttackSequence(AttackingUnit _att, DefensingUnit _def){
+    public AttackSequence(Unit _att, Model _def){
         att = _att;
         def = _def;
     }
@@ -25,26 +23,25 @@ public class AttackSequence {
     public double statRoll(){
         double lostModels = 0;
 
-        for(Pair<Weapon, Integer> weaponGroup: att.getWeaponGroups()){
-            Weapon weapon = weaponGroup.getValue0();
-            int nbWeapons = weaponGroup.getValue1();
+        for(Model model: att){
+            for(Weapon weapon: model.weapons){
+                double hits         = statHitRoll(weapon);
+                double wounds       = statWoundRoll(weapon, hits);
+                double failedSaves  = statSaveRoll(weapon, wounds);
+                double dmg          = statDmgRoll(weapon, failedSaves);
+                double hploss       = statFnpRoll(dmg);
 
-            double hits         = statHitRoll(weapon, nbWeapons);
-            double wounds       = statWoundRoll(weapon, hits);
-            double failedSaves  = statSaveRoll(weapon, wounds);
-            double dmg          = statDmgRoll(weapon, failedSaves);
-            double hploss       = statFnpRoll(dmg);
-
-            //Check lost models
-                //TODO makes the maths
-            lostModels += hploss;
+                //Check lost models
+                    //TODO makes the maths
+                lostModels += hploss;
+            }
         }
 
         return lostModels;
     }
 
-    private double statHitRoll(Weapon weapon, int nbWeapons) {
-        DiceRoll hitRoll = DiceRoll.statsRollD6((double)(nbWeapons * weapon.nbAtt));
+    private double statHitRoll(Weapon weapon) {
+        DiceRoll hitRoll = DiceRoll.statsRollD6((double)(weapon.nbAtt));
             
         // TODO makes the hit roll options
             
@@ -56,15 +53,16 @@ public class AttackSequence {
         DiceRoll woundRoll = DiceRoll.statsRollD6(hits);
 
         int scoreForWound = 0;
-        if(def.toughness <= weapon.strength/2.){
+        int toughness = def.toughness;
+        if( toughness <= weapon.strength/2.){
             scoreForWound = 2;
-        } else if(weapon.strength <= def.toughness/2.){
+        } else if(weapon.strength <= toughness/2.){
             scoreForWound = 6;
-        } else if(weapon.strength == def.toughness){
+        } else if(weapon.strength == toughness){
             scoreForWound = 4;
-        } else if(weapon.strength < def.toughness){
+        } else if(weapon.strength < toughness){
             scoreForWound = 5;
-        } else if(def.toughness < weapon.strength){
+        } else if(toughness < weapon.strength){
             scoreForWound = 3;
         }
         

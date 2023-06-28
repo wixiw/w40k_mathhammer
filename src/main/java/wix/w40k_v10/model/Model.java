@@ -1,9 +1,11 @@
 package wix.w40k_v10.model;
 
+import java.util.ArrayList;
+
 /**
  * Represent the unit which is the target of attacks
  */
-public class DefensingUnit {
+public class Model {
     public int toughness;
     public int armorSave;
     public int invSave;
@@ -11,9 +13,12 @@ public class DefensingUnit {
     public boolean hasCover = false;
     public boolean hasStealth = false;
 
-    private DefensingUnit(){};
+    public ArrayList<Weapon> weapons = new ArrayList<Weapon>();
 
-    public DefensingUnit(int T, int Svg, int Inv){
+    // Prevent unexpected default constructor
+    private Model(){};
+
+    public Model(int T, int Svg, int Inv){
         toughness = T;
         armorSave = Svg;
         invSave = Inv;
